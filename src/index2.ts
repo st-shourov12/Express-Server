@@ -8,4 +8,13 @@
  * npm install express --save
  * npm i --save-dev @types/express
  * npm i -D tsx
+ * 
+ * 
+ * 
+ * 
+ * neondb
+ * npx neonctl@latest init
+ * 
+ * npm i pg
+ * npm i --save-dev @types/pg
  */
