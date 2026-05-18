@@ -62,7 +62,7 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.post("/", async (req: Request, res: Response) => {
+app.post("/api/user", async (req: Request, res: Response) => {
   const { name, email, password, is_active, age, created_at, updated_at } =
     req.body;
 
@@ -82,9 +82,59 @@ app.post("/", async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(500).json({
-        message : error.message,
-        error : error
-    })
+      message: error.message,
+      error: error,
+    });
+  }
+});
+
+app.get("/api/user", async (req: Request, res: Response) => {
+  try {
+    const result = await pool.query(`
+            SELECT * FROM users
+        `);
+    res.status(200).json({
+      success: true,
+      message: "Users Retrive successfully",
+      data: result.rows,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+});
+
+app.get("/api/user/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      `
+            SELECT * FROM users WHERE id=$1
+        `,
+      [id],
+    );
+
+    if (result.rows.length === 0) {
+      res.status(500).json({
+        success: false,
+        message: "User Not Found",
+       
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "User Retrive successfully",
+      data: result.rows[0],
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      error: error,
+    });
   }
 });
 
